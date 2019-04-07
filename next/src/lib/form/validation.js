@@ -26,6 +26,7 @@ export const email = value => every([isNotEmpty, isNotEmail])(value) && 'Must be
 // export const checked = value => !value && 'Este campo deve estar marcado'
 // export const min = min => value => value < min && `Número deve ser maior ou igual a ${min}`
 // export const max = max => value => value >= max && `Número deve ser menor que ${max}`
+export const allowedStandardCharacters = value => !/^([a-z0-9\-_]+)$/.test(value) && 'São permitidos apenas números, letras minúsculas sem acentos, e underscore'
 
 export const equalsField = (field, label) => (value, values) =>
   value !== values[field] && `Must equal field ${label}`

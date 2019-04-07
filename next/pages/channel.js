@@ -28,6 +28,7 @@ import Label from 'grommet/components/Label'
 
 import bootstrap from 'app/lib/bootstrap'
 import TextInput from 'app/modules/form/components/TextInput'
+import { allowedStandardCharacters } from 'app/lib/form/validation'
 
 const StyledRoomHeader = styled(Header)`
   border-bottom: 1px solid #ddd;
@@ -79,9 +80,11 @@ const ChatRoom = ({ url, url: { query: { channel = 'general' } } }) => (
                       { create => (
                         <AddChannelButton
                           icon={ <AddCircleIcon /> }
-                          onClick={ () => create(
-                            window.prompt('Name your new channel')
-                          ) }
+                          onClick={ () => {
+                            const channelName = window.prompt('Name your new channel')
+                            const validateMessage = allowedStandardCharacters(channelName)
+                            validateMessage ? window.alert(validateMessage) : create(channelName)
+                          } }
                         />
                       ) }
                     </NewChannelContainer>
