@@ -6,6 +6,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Link from 'next/link'
+import Router, { withRouter } from 'next/router'
 
 import { HashLoader } from 'react-spinners'
 import App from 'grommet/components/App'
@@ -105,57 +106,57 @@ const ChatRoom = ({ url, url: { query: { channel = 'general' } } }) => (
                   </Footer>
                 </Sidebar>
 
-                { !user || !user.uid ? (
-                  <LoadingComponent />
-                ) : (
-                  <MessagesContainer channel={ channels.find(({ name }) => name === channel) }>
-                    { ({ loading, refetch, messages }) => (
-                      <Box full='vertical'>
-                        <StyledRoomHeader pad={ { vertical: 'small', horizontal: 'medium' } } justify='between'>
-                          <Title>
-                            { '#' + channel }
-                          </Title>
+                { !user || !user.uid
+                  ? Router.push('/')
+                  : (
+                    <MessagesContainer channel={ channels.find(({ name }) => name === channel) }>
+                      { ({ loading, refetch, messages }) => (
+                        <Box full='vertical'>
+                          <StyledRoomHeader pad={ { vertical: 'small', horizontal: 'medium' } } justify='between'>
+                            <Title>
+                              { '#' + channel }
+                            </Title>
 
-                          <Button icon={ <RefreshIcon /> } onClick={ () => refetch() } />
-                        </StyledRoomHeader>
+                            <Button icon={ <RefreshIcon /> } onClick={ () => refetch() } />
+                          </StyledRoomHeader>
 
-                        <Box pad='medium' flex='grow'>
-                          { loading ? 'Loading...' : (
-                            messages.length === 0 ? 'No one talking here yet :(' : (
-                              messages.map(({ id, author, message }) => (
-                                <Box key={ id } pad='small' credit={ author }>
-                                  <StyledAuthor>{ author }</StyledAuthor>
-                                  <StyledMessage>{ message }</StyledMessage>
-                                </Box>
-                              ))
-                            )
-                          ) }
+                          <Box pad='medium' flex='grow'>
+                            { loading ? 'Loading...' : (
+                              messages.length === 0 ? 'No one talking here yet :(' : (
+                                messages.map(({ id, author, message }) => (
+                                  <Box key={ id } pad='small' credit={ author }>
+                                    <StyledAuthor>{ author }</StyledAuthor>
+                                    <StyledMessage>{ message }</StyledMessage>
+                                  </Box>
+                                ))
+                              )
+                            ) }
+                          </Box>
+
+                          <Box pad='medium' direction='column'>
+                            { user && user.uid ? (
+                              <NewMessageContainer
+                                user={ user }
+                                channel={ channels.find(({ name }) => name === channel) }
+                              >
+                                { ({ handleSubmit }) => (
+                                  <form onSubmit={ handleSubmit }>
+                                    <NewMessageContainer.Message
+                                      placeHolder='Message #general'
+                                      component={ StyledTextInput }
+                                    />
+                                  </form>
+                                ) }
+                              </NewMessageContainer>
+                            ) : (
+                              'Log in to post messages'
+                            ) }
+                          </Box>
                         </Box>
-
-                        <Box pad='medium' direction='column'>
-                          { user && user.uid ? (
-                            <NewMessageContainer
-                              user={ user }
-                              channel={ channels.find(({ name }) => name === channel) }
-                            >
-                              { ({ handleSubmit }) => (
-                                <form onSubmit={ handleSubmit }>
-                                  <NewMessageContainer.Message
-                                    placeHolder='Message #general'
-                                    component={ StyledTextInput }
-                                  />
-                                </form>
-                              ) }
-                            </NewMessageContainer>
-                          ) : (
-                            'Log in to post messages'
-                          ) }
-                        </Box>
-                      </Box>
-                    ) }
-                  </MessagesContainer>
-                ) }
-
+                      ) }
+                    </MessagesContainer>
+                  )
+                }
               </Split>
             </App>
           )
@@ -169,4 +170,4 @@ ChatRoom.propTypes = {
   url: PropTypes.object.isRequired,
 }
 
-export default bootstrap(ChatRoom)
+export default bootstrap(withRouter(ChatRoom))
