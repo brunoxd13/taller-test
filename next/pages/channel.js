@@ -163,7 +163,6 @@ const ChatRoom = ({ url, url: { query: { channel = 'general' } } }) => (
                               'Log in to post messages'
                             ) }
                           </Box>
-                          
                         </Box>
                       ) }
                     </MessagesContainer>
