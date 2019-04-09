@@ -51,6 +51,12 @@ const AddChannelButton = styled(Button)`
   margin-left: auto;
 `
 
+const MessagesScrollBox = styled(Box)`
+  overflow-y: scroll;
+  flex-grow: 1;
+  flex-basis: 0;
+`
+
 const LoadingComponent = () => (
   <Box full='vertical' justify='center' align='center'>
     <HashLoader color='#e02438' loading />
@@ -123,18 +129,20 @@ const ChatRoom = ({ url, url: { query: { channel = 'general' } } }) => (
                             <Button icon={ <RefreshIcon /> } onClick={ () => refetch() } />
                           </StyledRoomHeader>
 
-                          <Box pad='medium' flex='grow'>
-                            { loading ? 'Loading...' : (
-                              messages.length === 0 ? 'No one talking here yet :(' : (
-                                messages.map(({ id, author, message }) => (
-                                  <Box key={ id } pad='small' credit={ author }>
-                                    <StyledAuthor>{ author }</StyledAuthor>
-                                    <StyledMessage>{ message }</StyledMessage>
-                                  </Box>
-                                ))
-                              )
-                            ) }
-                          </Box>
+                          <MessagesScrollBox>
+                            <Box pad='medium' flex='grow'>
+                              { loading ? 'Loading...' : (
+                                messages.length === 0 ? 'No one talking here yet :(' : (
+                                  messages.map(({ id, author, message }) => (
+                                    <Box key={ id } pad='small' credit={ author }>
+                                      <StyledAuthor>{ author }</StyledAuthor>
+                                      <StyledMessage>{ message }</StyledMessage>
+                                    </Box>
+                                  ))
+                                )
+                              ) }
+                            </Box>
+                          </MessagesScrollBox>
 
                           <Box pad='medium' direction='column'>
                             { user && user.uid ? (
@@ -155,6 +163,7 @@ const ChatRoom = ({ url, url: { query: { channel = 'general' } } }) => (
                               'Log in to post messages'
                             ) }
                           </Box>
+                          
                         </Box>
                       ) }
                     </MessagesContainer>
