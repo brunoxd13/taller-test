@@ -54,7 +54,7 @@ const normalize = pipe(
 
 const MessagesContainer = ({ children, channel }) => (
   channel && channel.tid ? (
-    <Query query={ query } variables={ { channel: channel.tid } }>
+    <Query query={ query } variables={ { channel: channel.tid } } pollInterval={ 1000 } >
       { pipe(normalize, children) }
     </Query>
   ) : (
