@@ -26,6 +26,7 @@ const query = gql`
         id
         author: entityOwner {
           name
+          mail
         }
         ... on Message {
           message: body {
@@ -38,8 +39,7 @@ const query = gql`
 `
 
 const normalizeMessage = pipe(
-  over(lensProp('author'), prop('name')),
-  over(lensProp('message'), prop('value')),
+  over(lensProp('message'), prop('value'))
 )
 
 const normalize = pipe(
