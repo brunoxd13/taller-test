@@ -6,7 +6,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Link from 'next/link'
-import Router, { withRouter } from 'next/router'
 
 import { HashLoader } from 'react-spinners'
 import App from 'grommet/components/App'
@@ -109,7 +108,7 @@ const ChatRoom = ({ url, url: { query: { channel = 'general' } } }) => (
                 </Sidebar>
 
                 { !user || !user.uid
-                  ? Router.push('/')
+                  ? <LoadingComponent />
                   : (
                     <MessagesContainer channel={ channels.find(({ name }) => name === channel) }>
                       { ({ loading, refetch, messages }) => (
@@ -170,4 +169,4 @@ ChatRoom.propTypes = {
   url: PropTypes.object.isRequired,
 }
 
-export default bootstrap(withRouter(ChatRoom))
+export default bootstrap(ChatRoom)
