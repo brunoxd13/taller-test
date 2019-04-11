@@ -105,7 +105,15 @@ const ChatRoom = ({ url, url: { query: { channel = 'general' } } }) => (
 
                   <Footer pad='medium'>
                     <Button icon={ <UserIcon /> } onClick={ console.log } />
-                    <LogoutContainer />
+                    <LogoutContainer>
+                      {({ logoutUser, error, loading }) => (
+                        <div>
+                          <Button icon={ <LogoutIcon /> } onClick={ () => logoutUser() } />
+                          {error && <div>Error! {error.message}</div>}
+                          {loading && <div>Logout...</div>}
+                        </div>
+                      )}
+                    </LogoutContainer>
                   </Footer>
                 </Sidebar>
 

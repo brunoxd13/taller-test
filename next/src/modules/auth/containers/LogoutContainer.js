@@ -2,7 +2,6 @@ import React from 'react'
 import { Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
 import Router from 'next/router'
-import Button from 'grommet/components/Button'
 
 export const logoutMutation = gql`
   mutation UserLogout {
@@ -12,17 +11,16 @@ export const logoutMutation = gql`
     }
   }
 `
-const LogoutContainer = () => (
-  <Mutation mutation={ logoutMutation } onCompleted={ () => Router.push('/') } >
-    {(logoutMutate, error, loading) => (
-      <div>
-        {error && <div>Error! {error.message}</div>}
+const LogoutContainer = ({ children }) => (
+  <Mutation mutation={ logoutMutation }>
+    {(logoutMutate, error, loading) => {
+      const logoutUser = () => {
+        logoutMutate()
+        Router.push('/')
+      }
 
-        <Button onClick={ logoutMutate } disabled={ loading } >
-          {loading ? 'Logout...' : 'Logout'}
-        </Button>
-      </div>
-    )}
+      return children({ logoutUser, error, loading })
+    }}
   </Mutation>
 )
 
